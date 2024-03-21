@@ -1,3 +1,5 @@
+// запись high_score в файл
+
 #include "tetris.h"
 
 int main() {
@@ -52,9 +54,9 @@ WINDOW *init_work_screen() {
   }
 
   mvwprintw(work_screen, 2, 45, "NEXT FIGURE");
-  mvwprintw(work_screen, 17, 45, "LEVEL");
-  mvwprintw(work_screen, 21, 45, "SCORE");
-  mvwprintw(work_screen, 25, 45, "HIGH SCORE");
+  mvwprintw(work_screen, 14, 45, "LEVEL");
+  mvwprintw(work_screen, 17, 45, "SCORE");
+  mvwprintw(work_screen, 20, 45, "HIGH SCORE");
 
   return work_screen;
 }
@@ -111,9 +113,9 @@ void print_stats(board game, WINDOW *work_screen) {
     }
   }
 
-  mvwprintw(work_screen, 17, 55, "%10d", game.level);
-  mvwprintw(work_screen, 21, 55, "%10d", game.score);
-  mvwprintw(work_screen, 25, 55, "%10d", game.high_score);
+  mvwprintw(work_screen, 14, 55, "%10d", game.level);
+  mvwprintw(work_screen, 17, 55, "%10d", game.score);
+  mvwprintw(work_screen, 20, 55, "%10d", game.high_score);
 
   wrefresh(work_screen);
 }
