@@ -1,13 +1,12 @@
 #ifndef TETRIS_H
 #define TETRIS_H
 
+#include <math.h>
 #include <ncurses.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/time.h>
 #include <time.h>
-#include <math.h>
-
 
 #define HEIGHT 20
 #define WIDTH 10
