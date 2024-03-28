@@ -40,8 +40,6 @@ typedef struct tetris {
 
 void timer_shift(GameInfo_t *game);
 void make_user_action(GameInfo_t *game, int ch);
-long long get_time();
-int timer(long long *prev_time, int delay);
 int collision(GameInfo_t game);
 void shift_left(figure *fig);
 void shift_right(figure *fig);

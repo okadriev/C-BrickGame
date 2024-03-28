@@ -31,7 +31,7 @@ void make_user_action(GameInfo_t *game, int ch) {
   } else if (ch == 'q') {
     game->in_progress = 0;
 
-  } else if (ch == 'p') {
+  } else if (ch == 'p' || ch == 'e') {
     game->pause = 1;
 
   } else if (ch == ' ') {
@@ -99,25 +99,6 @@ figure rotate(figure f) {
   }
 
   return temp;
-}
-
-long long get_time() {
-  struct timeval t;
-  gettimeofday(&t, NULL);
-
-  return (long long)t.tv_sec * 1000 + t.tv_usec / 1000;
-}
-
-int timer(long long *prev_time, int delay) {
-  int result = 1;
-  long long int time = get_time();
-
-  if (time - *prev_time >= delay) {
-    *prev_time = time;
-    result = 0;
-  }
-
-  return result;
 }
 
 void place_figure(GameInfo_t *game) {
@@ -210,7 +191,7 @@ figure get_new_figure() {
     fig.shape[0] = 0b011 << fig.x;
     fig.shape[1] = 0b110 << fig.x;
 
-  } else if (fig_num == 6) {
+  } else {
     fig.size = 4;
     fig.x = 3;
     fig.shape[0] = 0b100 << fig.x;

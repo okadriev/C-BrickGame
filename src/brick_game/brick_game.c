@@ -1,6 +1,3 @@
-// конечный автомат?
-// управление
-
 #include "../gui/cli/interface.h"
 #include "tetris/tetris.h"
 

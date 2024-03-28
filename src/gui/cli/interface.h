@@ -9,6 +9,8 @@ GameInfo_t init_board();
 void init_ncurses();
 WINDOW *init_work_screen();
 int start_game(WINDOW *work_screen);
+long long get_time();
+int timer(long long *prev_time, int delay);
 int pause(WINDOW *work_screen);
 void print_field(GameInfo_t game, WINDOW *work_screen);
 void print_stats(GameInfo_t game, WINDOW *work_screen);

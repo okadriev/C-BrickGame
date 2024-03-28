@@ -1,6 +1,3 @@
-# dvi
-# test
-
 SHELL = /bin/bash
 CFLAGS = -Wall -Wextra -Werror -std=c11 -g
 VLGRND = valgrind --tool=memcheck --leak-check=yes --show-leak-kinds=all --track-origins=yes -s
@@ -29,10 +26,10 @@ dist: install
 	@tar -czvf build/brick_game.tar.gz Makefile brick_game gui
 
 test: install
-	@gcc -g -c brick_game/tetris/test.c -o test.o
+	@gcc $(CFLAGS) -c brick_game/tetris/test.c
 	@gcc $(CFLAGS) test.o -o test.out -L. -l:tetris.a $(TFLAGS)
-#	$(VLGRND) ./test.out
-	@./test.out
+#	@./test.out
+	@$(VLGRND) ./test.out
 	@rm -rf *.o test.out
 
 gcov_report: clear clean
@@ -51,4 +48,7 @@ run:
 clear:
 	@clear
 
-#	sudo apt-get install texlive-xetex
+# установка enumitem: sudo apt-get install texlive-latex-extra
+# установка gcovr: sudo apt install gcovr
+# установка ncurses: sudo apt-get install libncurses5-dev libncursesw5-dev
+# установка xelatex: sudo apt-get install texlive-latex-extra (если не работает прописать в маке абсолютный путь)

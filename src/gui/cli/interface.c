@@ -46,6 +46,14 @@ WINDOW *init_work_screen() {
   mvwprintw(work_screen, 17, 45, "SCORE");
   mvwprintw(work_screen, 20, 45, "HIGH SCORE");
 
+  mvwprintw(work_screen, 32, 45, "w (up)    - rotate figure");
+  mvwprintw(work_screen, 33, 45, "a (left)  - move left");
+  mvwprintw(work_screen, 34, 45, "s (down)  - move down");
+  mvwprintw(work_screen, 35, 45, "d (right) - move right");
+  mvwprintw(work_screen, 36, 45, "space     - fall down");
+  mvwprintw(work_screen, 38, 45, "p (e) - pause game");
+  mvwprintw(work_screen, 39, 45, "q - quit game");
+
   return work_screen;
 }
 
@@ -61,13 +69,32 @@ int start_game(WINDOW *work_screen) {
   return (ch == 'q') ? 0 : 1;
 }
 
+long long get_time() {
+  struct timeval t;
+  gettimeofday(&t, NULL);
+
+  return (long long)t.tv_sec * 1000 + t.tv_usec / 1000;
+}
+
+int timer(long long *prev_time, int delay) {
+  int result = 1;
+  long long int time = get_time();
+
+  if (time - *prev_time >= delay) {
+    *prev_time = time;
+    result = 0;
+  }
+
+  return result;
+}
+
 int pause(WINDOW *work_screen) {
   mvwprintw(work_screen, 20, 15, "GAME PAUSED");
-  mvwprintw(work_screen, 21, 10, "Press 'p' to unpause");
+  mvwprintw(work_screen, 21, 10, "Press 'p'  to unpause");
 
   int ch = 1;
-  while ((ch != 'p') && (ch != 'P') && (ch != 'q') && (ch != 'Q')) {
-    napms(100);
+  while ((ch != 'p') && (ch != 'q') && (ch != 'e')) {
+    napms(50);
     ch = wgetch(work_screen);
   }
 
