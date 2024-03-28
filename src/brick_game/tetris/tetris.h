@@ -13,6 +13,10 @@
 #define FULL_LINE 0b111111111111
 #define EMPTY_LINE 0b100000000001
 #define HIGH_SCORE_FILE "brick_game/tetris/high_score.txt"
+#define LEFT 0404
+#define RIGHT 0405
+#define DOWN 0402
+#define UP 0403
 
 typedef struct tetris_figure {
   int shape[4];
@@ -21,7 +25,7 @@ typedef struct tetris_figure {
   int x;
 } figure;
 
-typedef struct tetris_board {
+typedef struct tetris {
   int field[HEIGHT + 1];
   figure curr_figure;
   figure next_figure;
@@ -31,21 +35,20 @@ typedef struct tetris_board {
   int level;
   long long time;
   int in_progress;
-} board;
+  int pause;
+} GameInfo_t;
 
-#include "../../gui/cli/interface.h"
-
-void timer_shift(board *game);
-void make_user_action(board *game, int ch);
+void timer_shift(GameInfo_t *game);
+void make_user_action(GameInfo_t *game, int ch);
 long long get_time();
 int timer(long long *prev_time, int delay);
-int collision(board game);
+int collision(GameInfo_t game);
 void shift_left(figure *fig);
 void shift_right(figure *fig);
 figure rotate(figure f);
-void place_figure(board *game);
-void delete_full_lines(board *game);
-void delete_one_line(board *game, int line_number);
+void place_figure(GameInfo_t *game);
+void delete_full_lines(GameInfo_t *game);
+void delete_one_line(GameInfo_t *game, int line_number);
 figure get_new_figure();
 
 #endif

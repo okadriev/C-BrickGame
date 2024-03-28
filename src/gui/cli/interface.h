@@ -5,11 +5,13 @@
 
 #include "../../brick_game/tetris/tetris.h"
 
-board init_board();
+GameInfo_t init_board();
 void init_ncurses();
 WINDOW *init_work_screen();
-void print_field(board game, WINDOW *work_screen);
-void print_stats(board game, WINDOW *work_screen);
+int start_game(WINDOW *work_screen);
+int pause(WINDOW *work_screen);
+void print_field(GameInfo_t game, WINDOW *work_screen);
+void print_stats(GameInfo_t game, WINDOW *work_screen);
 void end_game(WINDOW *work_screen, int high_score);
 
 #endif

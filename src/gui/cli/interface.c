@@ -1,13 +1,11 @@
 #include "interface.h"
 
-board init_board() {
-  board game = {0};
+GameInfo_t init_board() {
+  GameInfo_t game = {0};
   game.delay = BASE_DELAY;
-  timeout(game.delay);
   game.curr_figure = get_new_figure();
   game.next_figure = get_new_figure();
   game.time = get_time();
-  game.in_progress = 1;
 
   for (int i = 0; i < HEIGHT; i++) {
     game.field[i] = EMPTY_LINE;
@@ -39,7 +37,7 @@ WINDOW *init_work_screen() {
   nodelay(work_screen, TRUE);
 
   box(work_screen, 0, 0);
-  for (int i = 1; i < 42; i++) {
+  for (int i = 1; i < 41; i++) {
     mvwprintw(work_screen, i, 41, "|");
   }
 
@@ -51,7 +49,32 @@ WINDOW *init_work_screen() {
   return work_screen;
 }
 
-void print_field(board game, WINDOW *work_screen) {
+int start_game(WINDOW *work_screen) {
+  mvwprintw(work_screen, 20, 10, "Press ENTER to start");
+
+  int ch = 1;
+  while ((ch != 10) && (ch != 'q') && (ch != 'Q')) {
+    napms(100);
+    ch = wgetch(work_screen);
+  }
+
+  return (ch == 'q') ? 0 : 1;
+}
+
+int pause(WINDOW *work_screen) {
+  mvwprintw(work_screen, 20, 15, "GAME PAUSED");
+  mvwprintw(work_screen, 21, 10, "Press 'p' to unpause");
+
+  int ch = 1;
+  while ((ch != 'p') && (ch != 'P') && (ch != 'q') && (ch != 'Q')) {
+    napms(100);
+    ch = wgetch(work_screen);
+  }
+
+  return (ch == 'q' || ch == 'Q') ? 0 : 1;
+}
+
+void print_field(GameInfo_t game, WINDOW *work_screen) {
   for (int i = 0; i < 4; i++) {
     game.field[i + game.curr_figure.y] |= game.curr_figure.shape[i];
   }
@@ -71,7 +94,8 @@ void print_field(board game, WINDOW *work_screen) {
   wrefresh(work_screen);
 }
 
-void print_stats(board game, WINDOW *work_screen) {
+void print_stats(GameInfo_t game, WINDOW *work_screen) {
+  timeout(game.delay);
   box(work_screen, 0, 0);
 
   for (int i = 0; i < 4; i++) {

@@ -1,14 +1,6 @@
-// конечный автомат?
-// pause
-// start game
-// test
-// makefile
-// dvi
-// dist
-
 #include "tetris.h"
 
-void timer_shift(board *game) {
+void timer_shift(GameInfo_t *game) {
   game->curr_figure.y++;
 
   if (collision(*game)) {
@@ -18,26 +10,29 @@ void timer_shift(board *game) {
   }
 }
 
-void make_user_action(board *game, int ch) {
-  if (ch == KEY_LEFT) {
+void make_user_action(GameInfo_t *game, int ch) {
+  if (ch == LEFT || ch == 'a') {
     shift_left(&game->curr_figure);
     if (collision(*game)) shift_right(&game->curr_figure);
 
-  } else if (ch == KEY_RIGHT) {
+  } else if (ch == RIGHT || ch == 'd') {
     shift_right(&game->curr_figure);
     if (collision(*game)) shift_left(&game->curr_figure);
 
-  } else if (ch == KEY_DOWN) {
+  } else if (ch == DOWN || ch == 's') {
     game->curr_figure.y++;
     if (collision(*game)) game->curr_figure.y--;
 
-  } else if (ch == KEY_UP) {
-    board temp = *game;
+  } else if (ch == UP || ch == 'w') {
+    GameInfo_t temp = *game;
     temp.curr_figure = rotate(game->curr_figure);
     if (!collision(temp)) game->curr_figure = temp.curr_figure;
 
-  } else if (ch == 'q' || ch == 'Q' || ch == 185 || ch == 153) {  // йЙ
+  } else if (ch == 'q') {
     game->in_progress = 0;
+
+  } else if (ch == 'p') {
+    game->pause = 1;
 
   } else if (ch == ' ') {
     while (!collision(*game)) {
@@ -47,7 +42,7 @@ void make_user_action(board *game, int ch) {
   }
 }
 
-int collision(board game) {
+int collision(GameInfo_t game) {
   int result = 0;
 
   for (int i = 0, j = game.curr_figure.y; i < 4; i++, j++) {
@@ -109,10 +104,8 @@ figure rotate(figure f) {
 long long get_time() {
   struct timeval t;
   gettimeofday(&t, NULL);
-  long long time = (long long)t.tv_sec * 1000;
-  time += t.tv_usec / 1000;
 
-  return time;
+  return (long long)t.tv_sec * 1000 + t.tv_usec / 1000;
 }
 
 int timer(long long *prev_time, int delay) {
@@ -127,7 +120,7 @@ int timer(long long *prev_time, int delay) {
   return result;
 }
 
-void place_figure(board *game) {
+void place_figure(GameInfo_t *game) {
   for (int i = 0; i < 4; i++) {
     int line = game->curr_figure.y;
     game->field[line + i] |= game->curr_figure.shape[i];
@@ -140,7 +133,7 @@ void place_figure(board *game) {
   }
 }
 
-void delete_full_lines(board *game) {
+void delete_full_lines(GameInfo_t *game) {
   int count = 0;
 
   for (int i = 0; i < HEIGHT; i++) {
@@ -167,10 +160,9 @@ void delete_full_lines(board *game) {
   int level = game->score / 600;
   game->level = (level > 9) ? 9 : level;
   game->delay = BASE_DELAY / pow(1.25, game->level);
-  timeout(game->delay);
 }
 
-void delete_one_line(board *game, int line_number) {
+void delete_one_line(GameInfo_t *game, int line_number) {
   for (int i = line_number; i > 0; i--) {
     game->field[i] = game->field[i - 1];
   }
