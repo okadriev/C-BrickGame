@@ -43,7 +43,7 @@ gcov_report: clear clean
 	@rm -rf *.o *.gcno *.gcda *.gcov gcov_r
 
 run:
-	@./tetris
+	@$(VLGRND) ./tetris
 
 clear:
 	@clear
